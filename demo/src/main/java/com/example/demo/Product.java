@@ -1,21 +1,31 @@
 package com.example.demo;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.annotation.Validated;
 
 
+@Entity
+@Table(name = "products")
 @Validated
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "product", nullable = false)
     @NotBlank(message = "Имя не может быть пустым")
     @Length(max = 255, message = "Название должно содержать не более 255 символов")
     private String name;
+    @Column(name = "description")
     @Length(max = 4096, message = "Описание должно содержать не более 4096 символов")
     private String description;
-    private double price;
+    @Column(name = "price")
+    private double price = 0.0;
+    @Column(name = "amount")
     private int amount;
+    @Column(name = "available")
     private boolean available;
 
 

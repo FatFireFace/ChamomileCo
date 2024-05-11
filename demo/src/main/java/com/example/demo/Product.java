@@ -14,7 +14,6 @@ public class Product {
     private String name;
     @Length(max = 4096, message = "Описание должно содержать не более 4096 символов")
     private String description;
-    @PositiveOrZero
     private double price;
     private int amount;
     private boolean available;

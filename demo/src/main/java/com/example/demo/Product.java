@@ -1,13 +1,18 @@
 package com.example.demo;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.validation.annotation.Validated;
 
+
+@Validated
 public class Product {
     private Long id;
-    @Size(max = 255, message = "Название должно содержать не более 255 символов")
+    @NotBlank(message = "Имя не может быть пустым")
+    @Length(max = 255, message = "Название должно содержать не более 255 символов")
     private String name;
-    @Size(max = 4096, message = "Описание должно содержать не более 4096 символов")
+    @Length(max = 4096, message = "Описание должно содержать не более 4096 символов")
     private String description;
     @PositiveOrZero
     private double price;

@@ -1,7 +1,11 @@
 package com.example.demo;
 
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +29,19 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(@RequestBody Product product) {
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody Product product) {
         product.setId(idCounter++);
         if (product.getPrice() < 0)
             product.setPrice(0);
         if (!product.isAvailable())
             product.setAvailable(false);
         products.add(product);
-        return product;
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(product.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")

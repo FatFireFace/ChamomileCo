@@ -1,0 +1,15 @@
+CREATE DATABASE IF NOT EXISTS customers
+    WITH
+    OWNER = Admin
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'en_US.UTF-8'
+    LC_CTYPE = 'en_US.UTF-8';
+CREATE ROLE Admin WITH SUPERUSER LOGIN PASSWORD 'admin';
+CREATE TABLE IF NOT EXISTS products
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price NUMERIC(10, 2) DEFAULT 0.00,
+    available BOOLEAN DEFAULT false
+);

@@ -1,12 +1,50 @@
-version: '3'
-
+version: '3.8'
 services:
-  postgres:
-    image: 'postgres:13'
-    container_name: 'java-postgres'
+  client-backend:
+    image: client:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - 5432:5432
+      - "8080:8080"
+    depends_on:
+      service-db:
+        condition: service_healthy
     environment:
-      - 'POSTGRES_USER=sa'
-      - 'POSTGRES_HOST_AUTH_METHOD=trust'
-      - 'POSTGRES_DB=java'
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/customers
+
+  service-db:
+    image: postgres:14.7-alpine
+    environment:
+      POSTGRES_USER: Admin
+      POSTGRES_PASSWORD: admin
+      PGDATA: /var/lib/postgresql/data/pgdata
+    healthcheck:
+        test: [ "CMD-SHELL", "pg_isready --dbname=customers --port=5432 --username=Admin"]
+        interval: 10s
+        timeout: 3s
+        retries: 3
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./resources/database/initDB.sql:/docker-entrypoint-initdb.d/initDB.sql
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:7
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: Admin
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:5050"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  db-data:
+  pgadmin-data:

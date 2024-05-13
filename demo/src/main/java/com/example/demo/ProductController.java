@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,5 +71,40 @@ public class ProductController {
             productService.deleteProduct(id);
             return ResponseEntity.status(200).body(String.format("Товар %d удален.", id));
 
+    }
+
+    @GetMapping("/search")
+    public List<Product> searchProductByName(@PathParam("name") String name) {
+        return productService.findProductByName(name);
+    }
+
+    @GetMapping("/search/to")
+    public List<Product> searchProductByNameTo(@PathParam("name") String name, @PathParam("value") int value) {
+        return productService.findProductByNameTo(name, value);
+    }
+
+    @GetMapping("/search/from-to")
+    public List<Product> searchProductByNameFromTo(@PathParam("name") String name, @PathParam("from") int from, @PathParam("to") int to) {
+        return productService.findProductByNameFromTo(name, from, to);
+    }
+
+    @GetMapping("/search/name")
+    public List<Product> searchProductByExactName(@PathParam("name") String name) {
+        return productService.findByName(name);
+    }
+
+    @GetMapping("/order/price")
+    public List<Product> orderByPrice() {
+        return productService.orderByPrice();
+    }
+
+    @GetMapping("/order/available")
+    public List<Product> orderByAvailable() {
+        return productService.orderByAvailable();
+    }
+
+    @GetMapping("/search/price-range")
+    public List<Product> searchProductByPriceRange(@PathParam("from") double from, @PathParam("to") double to) {
+        return productService.findByPriceInRange(from, to);
     }
 }

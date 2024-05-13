@@ -4,13 +4,15 @@ package com.example.demo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest
+@WebMvcTest(ProductController.class)
+@MockBean(ProductService.class)
 @AutoConfigureMockMvc
 public class ProductControllerTest {
 
@@ -53,6 +55,33 @@ public class ProductControllerTest {
     @Test
     public void testDeleteProduct() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/products/{id}", 1))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testSearchProductByNameTo() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/products/search/to")
+                        .param("name", "test")
+                        .param("value", "5")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testSearchProductByNameFromTo() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/products/search/from-to")
+                        .param("name", "test")
+                        .param("from", "0")
+                        .param("to", "5")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    public void testSearchProductByName() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/products/search/name")
+                        .param("name", "test")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

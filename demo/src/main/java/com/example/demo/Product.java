@@ -26,6 +26,14 @@ public class Product extends Identifiable{
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Selling> sellings;
 
+    public Product(){
+
+    }
+
+    public Product(long l, String productName, String description, double v, boolean b, int i) {
+        super();
+    }
+
     public int getAvailableAmount() {
         int shippedAmount = shipments.stream().mapToInt(Shipment::getAmount).sum();
         int soldAmount = sellings.stream().mapToInt(Selling::getAmount).sum();

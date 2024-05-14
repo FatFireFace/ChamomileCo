@@ -11,10 +11,12 @@ import java.util.List;
 public class SellingService {
 
     private final SellingRepository sellingRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public SellingService(SellingRepository sellingRepository) {
+    public SellingService(SellingRepository sellingRepository, ProductRepository productRepository) {
         this.sellingRepository = sellingRepository;
+        this.productRepository = productRepository;
     }
 
     public List<Selling> getAllSellings() {

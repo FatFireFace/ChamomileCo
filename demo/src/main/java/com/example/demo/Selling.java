@@ -18,6 +18,9 @@ public class Selling extends Identifiable{
     @NotNull(message = "укажите верное число проданных товаров")
     private int quantitySold;
 
+    @Column(name = "price")
+    private double purchasePrice;
+
     public int getAmount(){
         return quantitySold;
     }
@@ -32,5 +35,11 @@ public class Selling extends Identifiable{
 
     public void setProduct(Product product) {
         this.product = product;
+        this.purchasePrice = product.getPrice();
     }
+
+    public double getPurchasePrice() {
+        return purchasePrice;
+    }
+
 }

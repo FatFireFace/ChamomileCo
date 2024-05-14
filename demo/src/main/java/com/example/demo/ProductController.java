@@ -15,7 +15,6 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
-
     private Long idCounter = 1L;
 
     @GetMapping
